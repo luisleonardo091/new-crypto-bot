@@ -1,0 +1,13 @@
+{
+  "name": "new-crypto-bot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Crypto trading bot with Python brain and TypeScript UI",
+  "scripts": {
+    "analyze": "node scripts/analyze.js",
+    "polymarket:analyze": "node scripts/polymarket-analyze.js",
+    "start:ui": "node frontend/dev-server.js",
+    "start:brain": "python backend/brain.py",
+    "start": "npm run analyze && npm run start:ui"
+  }
+}

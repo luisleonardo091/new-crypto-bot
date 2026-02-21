@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polymarket 15m Assistant</title>
+  <style>
+    :root {
+      --bg0: #f0f5ff;
+      --bg1: #dfeeff;
+      --panel: #ffffff;
+      --text: #132034;
+      --muted: #55708f;
+      --ok: #0f8b5f;
+      --wait: #d9822b;
+      --bad: #cb3f4f;
+      --line: #c6d8ef;
+      --btn: #0f5ec8;
+      --btnHover: #0a4ca5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--bg0), var(--bg1));
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      padding: 24px 14px;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(15, 54, 108, 0.08);
+    }
+    h1 { margin: 0 0 4px; font-size: 1.3rem; }
+    p { margin: 0; color: var(--muted); }
+    .grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 760px) {
+      .grid { grid-template-columns: 2fr 1fr 1fr auto; }
+    }
+    label {
+      display: block;
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--btn);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 22px;
+    }
+    button:hover { background: var(--btnHover); }
+    button.alt {
+      background: #2f7a3b;
+      margin-left: 6px;
+    }
+    button.alt:hover { background: #266730; }
+    .decision {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .ok { color: var(--ok); background: #ecfbf4; }
+    .wait { color: var(--wait); background: #fff4e8; }
+    .bad { color: var(--bad); background: #fff0f3; }
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fafcff;
+    }
+    .metric b { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 3px; }
+    .small { margin-top: 8px; font-size: 0.86rem; color: var(--muted); }
+    .error { color: var(--bad); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Polymarket 15m Assistant</h1>
+      <p>Lectura simple para decidir si conviene entrar ahora en YES o NO.</p>
+    </section>
+
+    <section class="card">
+      <div class="grid">
+        <div>
+          <label for="url">URL del evento Polymarket</label>
+          <input id="url" type="text" value="https://polymarket.com/es/event/btc-updown-15m-1771652700" />
+        </div>
+        <div>
+          <label for="stake">Stake (USD)</label>
+          <input id="stake" type="number" min="1" step="1" value="100" />
+        </div>
+        <div>
+          <label for="pYes">Tu prob. YES (0 a 1)</label>
+          <input id="pYes" type="number" min="0" max="1" step="0.01" value="0.56" />
+        </div>
+        <div>
+          <button id="runBtn">Analizar</button>
+          <button id="autoBtn" class="alt">Auto BTC 15m</button>
+        </div>
+      </div>
+      <div class="small">Ejemplo: si crees que YES tiene 56% de probabilidad, usa <code>0.56</code>.</div>
+    </section>
+
+    <section class="card">
+      <div id="decisionBox" class="decision wait">Esperando análisis...</div>
+      <p id="reason" class="small">Ingresa datos y presiona Analizar.</p>
+      <p id="prediction" class="small"></p>
+      <p id="marketInfo" class="small"></p>
+      <p id="error" class="small error"></p>
+
+      <div class="metrics">
+        <div class="metric"><b>YES bid/ask/spread</b><span id="yesBasics">-</span></div>
+        <div class="metric"><b>NO bid/ask/spread</b><span id="noBasics">-</span></div>
+        <div class="metric"><b>Liquidez YES (ask/bid)</b><span id="yesLiq">-</span></div>
+        <div class="metric"><b>Liquidez NO (ask/bid)</b><span id="noLiq">-</span></div>
+        <div class="metric"><b>EV por share YES</b><span id="yesEv">-</span></div>
+        <div class="metric"><b>EV por share NO</b><span id="noEv">-</span></div>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
